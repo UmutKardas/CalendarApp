@@ -6,6 +6,16 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		8A9657EA2CFCD1E8004478D7 /* Swinject in Frameworks */ = {isa = PBXBuildFile; productRef = 8A9657E92CFCD1E8004478D7 /* Swinject */; };
+		8A9657ED2CFCD2AE004478D7 /* RxBlocking in Frameworks */ = {isa = PBXBuildFile; productRef = 8A9657EC2CFCD2AE004478D7 /* RxBlocking */; };
+		8A9657EF2CFCD2AE004478D7 /* RxCocoa in Frameworks */ = {isa = PBXBuildFile; productRef = 8A9657EE2CFCD2AE004478D7 /* RxCocoa */; };
+		8A9657F12CFCD2AE004478D7 /* RxRelay in Frameworks */ = {isa = PBXBuildFile; productRef = 8A9657F02CFCD2AE004478D7 /* RxRelay */; };
+		8A9657F32CFCD2AE004478D7 /* RxSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 8A9657F22CFCD2AE004478D7 /* RxSwift */; };
+		8A9657F82CFCD2BD004478D7 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 8A9657F72CFCD2BD004478D7 /* SnapKit */; };
+		8A9657FB2CFCD2E3004478D7 /* RxTest in Frameworks */ = {isa = PBXBuildFile; productRef = 8A9657FA2CFCD2E3004478D7 /* RxTest */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		8A9657C42CFCCF90004478D7 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -65,6 +75,12 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8A9657EF2CFCD2AE004478D7 /* RxCocoa in Frameworks */,
+				8A9657EA2CFCD1E8004478D7 /* Swinject in Frameworks */,
+				8A9657F32CFCD2AE004478D7 /* RxSwift in Frameworks */,
+				8A9657F82CFCD2BD004478D7 /* SnapKit in Frameworks */,
+				8A9657F12CFCD2AE004478D7 /* RxRelay in Frameworks */,
+				8A9657ED2CFCD2AE004478D7 /* RxBlocking in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -72,6 +88,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8A9657FB2CFCD2E3004478D7 /* RxTest in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -91,6 +108,7 @@
 				8A9657AC2CFCCF8F004478D7 /* Calendar */,
 				8A9657C62CFCCF90004478D7 /* CalendarTests */,
 				8A9657D02CFCCF90004478D7 /* CalendarUITests */,
+				8A9657F92CFCD2E3004478D7 /* Frameworks */,
 				8A9657AB2CFCCF8F004478D7 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -103,6 +121,13 @@
 				8A9657CD2CFCCF90004478D7 /* CalendarUITests.xctest */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		8A9657F92CFCD2E3004478D7 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -125,6 +150,12 @@
 			);
 			name = Calendar;
 			packageProductDependencies = (
+				8A9657E92CFCD1E8004478D7 /* Swinject */,
+				8A9657EC2CFCD2AE004478D7 /* RxBlocking */,
+				8A9657EE2CFCD2AE004478D7 /* RxCocoa */,
+				8A9657F02CFCD2AE004478D7 /* RxRelay */,
+				8A9657F22CFCD2AE004478D7 /* RxSwift */,
+				8A9657F72CFCD2BD004478D7 /* SnapKit */,
 			);
 			productName = Calendar;
 			productReference = 8A9657AA2CFCCF8F004478D7 /* Calendar.app */;
@@ -148,6 +179,7 @@
 			);
 			name = CalendarTests;
 			packageProductDependencies = (
+				8A9657FA2CFCD2E3004478D7 /* RxTest */,
 			);
 			productName = CalendarTests;
 			productReference = 8A9657C32CFCCF90004478D7 /* CalendarTests.xctest */;
@@ -208,6 +240,11 @@
 			);
 			mainGroup = 8A9657A12CFCCF8F004478D7;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				8A9657E82CFCD1E8004478D7 /* XCRemoteSwiftPackageReference "Swinject" */,
+				8A9657EB2CFCD2AE004478D7 /* XCRemoteSwiftPackageReference "RxSwift" */,
+				8A9657F62CFCD2BD004478D7 /* XCRemoteSwiftPackageReference "SnapKit" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 8A9657AB2CFCCF8F004478D7 /* Products */;
 			projectDirPath = "";
@@ -561,6 +598,71 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		8A9657E82CFCD1E8004478D7 /* XCRemoteSwiftPackageReference "Swinject" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Swinject/Swinject";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.9.1;
+			};
+		};
+		8A9657EB2CFCD2AE004478D7 /* XCRemoteSwiftPackageReference "RxSwift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/ReactiveX/RxSwift";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 6.8.0;
+			};
+		};
+		8A9657F62CFCD2BD004478D7 /* XCRemoteSwiftPackageReference "SnapKit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SnapKit/SnapKit";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.7.1;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		8A9657E92CFCD1E8004478D7 /* Swinject */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 8A9657E82CFCD1E8004478D7 /* XCRemoteSwiftPackageReference "Swinject" */;
+			productName = Swinject;
+		};
+		8A9657EC2CFCD2AE004478D7 /* RxBlocking */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 8A9657EB2CFCD2AE004478D7 /* XCRemoteSwiftPackageReference "RxSwift" */;
+			productName = RxBlocking;
+		};
+		8A9657EE2CFCD2AE004478D7 /* RxCocoa */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 8A9657EB2CFCD2AE004478D7 /* XCRemoteSwiftPackageReference "RxSwift" */;
+			productName = RxCocoa;
+		};
+		8A9657F02CFCD2AE004478D7 /* RxRelay */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 8A9657EB2CFCD2AE004478D7 /* XCRemoteSwiftPackageReference "RxSwift" */;
+			productName = RxRelay;
+		};
+		8A9657F22CFCD2AE004478D7 /* RxSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 8A9657EB2CFCD2AE004478D7 /* XCRemoteSwiftPackageReference "RxSwift" */;
+			productName = RxSwift;
+		};
+		8A9657F72CFCD2BD004478D7 /* SnapKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 8A9657F62CFCD2BD004478D7 /* XCRemoteSwiftPackageReference "SnapKit" */;
+			productName = SnapKit;
+		};
+		8A9657FA2CFCD2E3004478D7 /* RxTest */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 8A9657EB2CFCD2AE004478D7 /* XCRemoteSwiftPackageReference "RxSwift" */;
+			productName = RxTest;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 8A9657A22CFCCF8F004478D7 /* Project object */;
 }
