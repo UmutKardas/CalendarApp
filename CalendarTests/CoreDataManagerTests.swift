@@ -1,14 +1,13 @@
 //
-//  CalendarTests.swift
+//  CoreDataManagerTests.swift
 //  CalendarTests
 //
-//  Created by Hüseyin Umut Kardaş on 1.12.2024.
+//  Created by Hüseyin Umut Kardaş on 12.12.2024.
 //
 
 import XCTest
-@testable import Calendar
 
-final class CalendarTests: XCTestCase {
+final class CoreDataManagerTests: XCTestCase {
 
     override func setUpWithError() throws {
         // Put setup code here. This method is called before the invocation of each test method in the class.
