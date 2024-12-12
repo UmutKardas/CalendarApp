@@ -14,6 +14,7 @@ class HomeViewController: UIViewController {
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
         tableView.translatesAutoresizingMaskIntoConstraints = false
         tableView.backgroundColor = UIColor(named: "tableViewColor")
+        tableView.separatorStyle = .none
         return tableView
     }()
 
@@ -52,7 +53,9 @@ private extension HomeViewController {
         }
     }
 
-    private func bindView() {}
+    private func bindView() {
+        
+    }
 }
 
 extension HomeViewController: UITableViewDelegate, UITableViewDataSource {

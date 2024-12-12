@@ -34,8 +34,10 @@ final class CoreDataManager: LocalDatabaseProtocol {
     }
 
     func createNewEntity<T>(entityName: String) -> T? where T: NSManagedObject {
-        let entityName = String(describing: entityName)
-        let entityDescription = NSEntityDescription.entity(forEntityName: entityName, in: context)!
+        guard let entityDescription = NSEntityDescription.entity(forEntityName: entityName, in: context) else {
+            print("Failed to find entity: \(entityName)")
+            return nil
+        }
         let object = T(entity: entityDescription, insertInto: context)
         return object
     }

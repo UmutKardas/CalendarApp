@@ -5,31 +5,70 @@
 //  Created by Hüseyin Umut Kardaş on 12.12.2024.
 //
 
+@testable import Calendar
+import CoreData
 import XCTest
 
 final class CoreDataManagerTests: XCTestCase {
+    var coreDataManager: CoreDataManager!
 
     override func setUpWithError() throws {
-        // Put setup code here. This method is called before the invocation of each test method in the class.
+        coreDataManager = CoreDataManager()
     }
 
     override func tearDownWithError() throws {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
+        coreDataManager = nil
     }
 
-    func testExample() throws {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
-        // Any test you write for XCTest can be annotated as throws and async.
-        // Mark your test throws to produce an unexpected failure when your test encounters an uncaught error.
-        // Mark your test async to allow awaiting for asynchronous code to complete. Check the results with assertions afterwards.
+    func testCreateNewEntity() throws {
+        let newEntity = coreDataManager.createNewEntity(entityName: "Item")
+        XCTAssertNotNil(newEntity, "Entity creation failed")
+
+        let fetchedEntities = coreDataManager.fetchObjects(entityName: "Item", predicate: nil, sortDescriptors: nil)
+        XCTAssertTrue(fetchedEntities!.contains(newEntity!), "Entity was not found in fetch")
+
+        coreDataManager.deleteObject(newEntity!)
     }
 
-    func testPerformanceExample() throws {
-        // This is an example of a performance test case.
-        self.measure {
-            // Put the code you want to measure the time of here.
+    func testSaveContext() throws {
+        let newEntity = coreDataManager.createNewEntity(entityName: "Item")
+        coreDataManager.saveContext()
+
+        if let fetchedEntities = coreDataManager.fetchObjects(entityName: "Item", predicate: nil, sortDescriptors: nil) {
+            XCTAssertTrue(fetchedEntities.contains(newEntity!), "Entity was not saved")
+        } else {
+            XCTFail("Failed to fetch entities")
+        }
+
+        coreDataManager.deleteObject(newEntity!)
+        coreDataManager.saveContext()
+
+        if let fetchedEntities = coreDataManager.fetchObjects(entityName: "Item", predicate: nil, sortDescriptors: nil) {
+            XCTAssertFalse(fetchedEntities.contains(newEntity!), "Entity was not deleted")
+        } else {
+            XCTFail("Failed to fetch entities after deletion")
         }
     }
 
+    func testFetchObjects() throws {
+        let newEntity = coreDataManager.createNewEntity(entityName: "Item")
+
+        let entities = coreDataManager.fetchObjects(entityName: "Item", predicate: nil, sortDescriptors: nil)
+        XCTAssertNotNil(entities, "Failed to fetch objects")
+        XCTAssertTrue(entities!.contains(newEntity!), "Fetched objects do not contain the created entity")
+
+        coreDataManager.deleteObject(newEntity!)
+    }
+
+    func testDeleteAll() throws {
+        let newEntity1 = coreDataManager.createNewEntity(entityName: "Item")
+        let newEntity2 = coreDataManager.createNewEntity(entityName: "Item")
+
+        coreDataManager.saveContext()
+
+        coreDataManager.deleteAll(entityName: "Item")
+
+        let remainingEntities = coreDataManager.fetchObjects(entityName: "Item", predicate: nil, sortDescriptors: nil)
+        XCTAssertEqual(remainingEntities?.count, 0, "Not all entities were deleted")
+    }
 }

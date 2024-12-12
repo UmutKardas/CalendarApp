@@ -44,6 +44,7 @@
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				Info.plist,
+				Resources/Calendar.xctestplan,
 			);
 			target = 8A9657A92CFCCF8F004478D7 /* Calendar */;
 		};

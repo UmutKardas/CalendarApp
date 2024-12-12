@@ -7,7 +7,40 @@
 		<key>Calendar.xcscheme_^#shared#^_</key>
 		<dict>
 			<key>orderHint</key>
+			<integer>1</integer>
+		</dict>
+		<key>Rx (Playground).xcscheme</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>2</integer>
+		</dict>
+		<key>Sample-iOS (Playground).xcscheme</key>
+		<dict>
+			<key>orderHint</key>
 			<integer>0</integer>
+		</dict>
+		<key>SnapKitPlayground (Playground).xcscheme</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>3</integer>
+		</dict>
+	</dict>
+	<key>SuppressBuildableAutocreation</key>
+	<dict>
+		<key>8A9657A92CFCCF8F004478D7</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>8A9657C22CFCCF90004478D7</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>8A9657CC2CFCCF90004478D7</key>
+		<dict>
+			<key>primary</key>
+			<true/>
 		</dict>
 	</dict>
 </dict>
