@@ -9,13 +9,75 @@ import SnapKit
 import UIKit
 
 class HomeTableViewCell: UITableViewCell {
+    static let identifier = "HomeTableViewCell"
+
+    private let dayNameLabel: UILabel = {
+        let label = UILabel()
+        label.text = "Sat"
+        label.font = .systemFont(ofSize: 16, weight: .light)
+        label.textColor = UIColor(named: "grayColor")
+        return label
+    }()
+
+    private let dayNumberLabel: UILabel = {
+        let label = UILabel()
+        label.text = "10"
+        label.font = .systemFont(ofSize: 20, weight: .regular)
+        label.textColor = .black
+        return label
+    }()
+
+    private let eventStackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.axis = .vertical
+        stackView.spacing = 1
+        stackView.alignment = .fill
+        stackView.distribution = .fill
+        return stackView
+    }()
+
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        
+        setupLayout()
+        setupConstraints()
     }
 
     @available(*, unavailable)
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+
+    private func setupLayout() {
+        addSubview(dayNameLabel)
+        addSubview(dayNumberLabel)
+        contentView.addSubview(eventStackView)
+
+        for _ in 0 ... 2 {
+            let eventItemView = EventItemView()
+            eventStackView.addArrangedSubview(eventItemView)
+        }
+    }
+
+    private func setupConstraints() {
+        dayNameLabel.snp.makeConstraints { make in
+            make.top.equalToSuperview().offset(8)
+            make.left.equalToSuperview().offset(8)
+        }
+
+        dayNumberLabel.snp.makeConstraints { make in
+            make.top.equalTo(dayNameLabel.snp.bottom).offset(6)
+            make.left.equalToSuperview().offset(8)
+        }
+
+        eventStackView.snp.makeConstraints { make in
+            make.top.equalToSuperview().offset(8)
+            make.left.equalTo(dayNameLabel.snp.right).offset(8)
+            make.right.equalToSuperview().offset(-8)
+            make.bottom.equalToSuperview().offset(-8)
+        }
+    }
+}
+
+#Preview {
+    HomeTableViewCell()
 }

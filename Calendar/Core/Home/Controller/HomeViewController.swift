@@ -15,6 +15,7 @@ class HomeViewController: UIViewController {
         tableView.translatesAutoresizingMaskIntoConstraints = false
         tableView.backgroundColor = UIColor(named: "tableViewColor")
         tableView.separatorStyle = .none
+        tableView.register(HomeTableViewCell.self, forCellReuseIdentifier: HomeTableViewCell.identifier)
         return tableView
     }()
 
@@ -24,6 +25,7 @@ class HomeViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        view.backgroundColor = .white
         tableView.delegate = self
         tableView.dataSource = self
         headerView.setup(viewModel: viewModel)
@@ -53,9 +55,7 @@ private extension HomeViewController {
         }
     }
 
-    private func bindView() {
-        
-    }
+    private func bindView() {}
 }
 
 extension HomeViewController: UITableViewDelegate, UITableViewDataSource {
@@ -64,10 +64,14 @@ extension HomeViewController: UITableViewDelegate, UITableViewDataSource {
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
-        cell.textLabel?.text = "Hello World"
-        cell.backgroundColor = UIColor(named: "tableViewColor")
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: HomeTableViewCell.identifier, for: indexPath) as? HomeTableViewCell else {
+            return UITableViewCell()
+        }
         return cell
+    }
+
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 100 * 3 + 3 * 4 // yukseklik x count + count + 1 x 3
     }
 }
 
