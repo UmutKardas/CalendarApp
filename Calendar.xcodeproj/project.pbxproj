@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		8A2271B72D1217E000A89CE7 /* RxCocoa in Frameworks */ = {isa = PBXBuildFile; productRef = 8A2271B62D1217E000A89CE7 /* RxCocoa */; };
+		8A2271B92D1217E000A89CE7 /* RxSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 8A2271B82D1217E000A89CE7 /* RxSwift */; };
 		8A9657EA2CFCD1E8004478D7 /* Swinject in Frameworks */ = {isa = PBXBuildFile; productRef = 8A9657E92CFCD1E8004478D7 /* Swinject */; };
 		8A9657ED2CFCD2AE004478D7 /* RxBlocking in Frameworks */ = {isa = PBXBuildFile; productRef = 8A9657EC2CFCD2AE004478D7 /* RxBlocking */; };
 		8A9657EF2CFCD2AE004478D7 /* RxCocoa in Frameworks */ = {isa = PBXBuildFile; productRef = 8A9657EE2CFCD2AE004478D7 /* RxCocoa */; };
@@ -89,6 +91,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8A2271B92D1217E000A89CE7 /* RxSwift in Frameworks */,
+				8A2271B72D1217E000A89CE7 /* RxCocoa in Frameworks */,
 				8A9657FB2CFCD2E3004478D7 /* RxTest in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -181,6 +185,8 @@
 			name = CalendarTests;
 			packageProductDependencies = (
 				8A9657FA2CFCD2E3004478D7 /* RxTest */,
+				8A2271B62D1217E000A89CE7 /* RxCocoa */,
+				8A2271B82D1217E000A89CE7 /* RxSwift */,
 			);
 			productName = CalendarTests;
 			productReference = 8A9657C32CFCCF90004478D7 /* CalendarTests.xctest */;
@@ -628,6 +634,16 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		8A2271B62D1217E000A89CE7 /* RxCocoa */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 8A9657EB2CFCD2AE004478D7 /* XCRemoteSwiftPackageReference "RxSwift" */;
+			productName = RxCocoa;
+		};
+		8A2271B82D1217E000A89CE7 /* RxSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 8A9657EB2CFCD2AE004478D7 /* XCRemoteSwiftPackageReference "RxSwift" */;
+			productName = RxSwift;
+		};
 		8A9657E92CFCD1E8004478D7 /* Swinject */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 8A9657E82CFCD1E8004478D7 /* XCRemoteSwiftPackageReference "Swinject" */;

@@ -7,68 +7,103 @@
 
 @testable import Calendar
 import CoreData
+import RxCocoa
+import RxSwift
+import RxTest
 import XCTest
 
 final class CoreDataManagerTests: XCTestCase {
     var coreDataManager: CoreDataManager!
+    var disposeBag: DisposeBag!
 
     override func setUpWithError() throws {
         coreDataManager = CoreDataManager()
+        disposeBag = DisposeBag()
     }
 
     override func tearDownWithError() throws {
         coreDataManager = nil
+        disposeBag = nil
     }
 
-    func testCreateNewEntity() throws {
-        let newEntity = coreDataManager.createNewEntity(entityName: "Item")
+    func testCreateNewEntity_Success() throws {
+        let newEntity = coreDataManager.createNewEntity(entityName: EventItem.coreDataEntityName)
         XCTAssertNotNil(newEntity, "Entity creation failed")
-
-        let fetchedEntities = coreDataManager.fetchObjects(entityName: "Item", predicate: nil, sortDescriptors: nil)
-        XCTAssertTrue(fetchedEntities!.contains(newEntity!), "Entity was not found in fetch")
-
-        coreDataManager.deleteObject(newEntity!)
     }
 
-    func testSaveContext() throws {
-        let newEntity = coreDataManager.createNewEntity(entityName: "Item")
-        coreDataManager.saveContext()
-
-        if let fetchedEntities = coreDataManager.fetchObjects(entityName: "Item", predicate: nil, sortDescriptors: nil) {
-            XCTAssertTrue(fetchedEntities.contains(newEntity!), "Entity was not saved")
-        } else {
-            XCTFail("Failed to fetch entities")
+    func testSaveEventItem_Success() throws {
+        let newEntity = coreDataManager.createNewEntity(entityName: EventItem.coreDataEntityName)
+        guard let entity = newEntity else {
+            XCTFail("Entity creation failed")
+            return
         }
 
-        coreDataManager.deleteObject(newEntity!)
-        coreDataManager.saveContext()
+        coreDataManager.saveEventItem(object: entity)
 
-        if let fetchedEntities = coreDataManager.fetchObjects(entityName: "Item", predicate: nil, sortDescriptors: nil) {
-            XCTAssertFalse(fetchedEntities.contains(newEntity!), "Entity was not deleted")
-        } else {
-            XCTFail("Failed to fetch entities after deletion")
+        let expectation = self.expectation(description: "Fetching entities")
+
+        var fetchedEntities: [EventItem]? = nil
+
+        coreDataManager.fetchObjects(entityName: EventItem.coreDataEntityName, predicate: nil, sortDescriptors: nil)
+            .subscribe(onNext: { entities in
+                fetchedEntities = entities
+                expectation.fulfill()
+            })
+            .disposed(by: disposeBag)
+
+        waitForExpectations(timeout: 5, handler: nil)
+
+        XCTAssertNotNil(fetchedEntities, "Fetched entities should not be nil")
+        XCTAssertTrue(fetchedEntities?.contains(where: { $0.id == entity.id }) == true, "Entity was not found in fetch")
+    }
+
+    func testDeleteObject_Success() throws {
+        let newEntity = coreDataManager.createNewEntity(entityName: EventItem.coreDataEntityName)
+        guard let entity = newEntity else {
+            XCTFail("Entity creation failed")
+            return
         }
+
+        coreDataManager.saveEventItem(object: entity)
+        coreDataManager.deleteObject(entity)
+
+        let expectation = self.expectation(description: "Fetching entities")
+
+        var fetchedEntities: [EventItem]? = nil
+
+        coreDataManager.fetchObjects(entityName: EventItem.coreDataEntityName, predicate: nil, sortDescriptors: nil)
+            .subscribe(onNext: { entities in
+                fetchedEntities = entities
+                expectation.fulfill()
+            })
+            .disposed(by: disposeBag)
+
+        waitForExpectations(timeout: 5, handler: nil)
+
+        XCTAssertFalse(fetchedEntities?.contains(where: { $0.id == entity.id }) == true, "Entity was not deleted successfully")
     }
 
-    func testFetchObjects() throws {
-        let newEntity = coreDataManager.createNewEntity(entityName: "Item")
-
-        let entities = coreDataManager.fetchObjects(entityName: "Item", predicate: nil, sortDescriptors: nil)
-        XCTAssertNotNil(entities, "Failed to fetch objects")
-        XCTAssertTrue(entities!.contains(newEntity!), "Fetched objects do not contain the created entity")
-
-        coreDataManager.deleteObject(newEntity!)
-    }
-
-    func testDeleteAll() throws {
-        let newEntity1 = coreDataManager.createNewEntity(entityName: "Item")
-        let newEntity2 = coreDataManager.createNewEntity(entityName: "Item")
+    func testDeleteAll_Success() throws {
+        let newEntity1 = coreDataManager.createNewEntity(entityName: EventItem.coreDataEntityName)
+        let newEntity2 = coreDataManager.createNewEntity(entityName: EventItem.coreDataEntityName)
 
         coreDataManager.saveContext()
 
-        coreDataManager.deleteAll(entityName: "Item")
+        coreDataManager.deleteAll(entityName: EventItem.coreDataEntityName)
 
-        let remainingEntities = coreDataManager.fetchObjects(entityName: "Item", predicate: nil, sortDescriptors: nil)
-        XCTAssertEqual(remainingEntities?.count, 0, "Not all entities were deleted")
+        let expectation = self.expectation(description: "Fetching entities")
+
+        var fetchedEntities: [EventItem]? = nil
+
+        coreDataManager.fetchObjects(entityName: EventItem.coreDataEntityName, predicate: nil, sortDescriptors: nil)
+            .subscribe(onNext: { entities in
+                fetchedEntities = entities
+                expectation.fulfill()
+            })
+            .disposed(by: disposeBag)
+
+        waitForExpectations(timeout: 5, handler: nil)
+
+        XCTAssertEqual(fetchedEntities?.count, 0, "Not all entities were deleted")
     }
 }

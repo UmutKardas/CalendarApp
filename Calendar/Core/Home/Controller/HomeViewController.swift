@@ -33,7 +33,7 @@ class HomeViewController: UIViewController {
     }()
 
     private lazy var headerView = HomeTableViewHeader()
-    private lazy var eventData: [EventItem] = []
+    private var eventData: [EventItem] = []
 
     private let viewModel: HomeViewModel = .init(localDatabase: AppContainer.shared.database)
     private let disposeBag = DisposeBag()
