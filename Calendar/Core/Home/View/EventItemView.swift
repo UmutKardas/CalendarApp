@@ -27,7 +27,7 @@ class EventItemView: UIView {
 
     private let cellBackgroundView: UIView = {
         let view = UIView()
-        view.backgroundColor = .blue
+        view.backgroundColor = UIColor(named: "blueColor")
         view.layer.cornerRadius = 8
         view.layer.shadowColor = UIColor.black.cgColor
         view.layer.shadowOffset = CGSize(width: 0, height: 1)
@@ -64,13 +64,13 @@ class EventItemView: UIView {
         }
 
         titleLabel.snp.makeConstraints { make in
-            make.top.equalToSuperview().offset(8)
-            make.left.equalToSuperview().offset(8)
+            make.centerY.equalTo(cellBackgroundView.snp.centerY).offset(-10)
+            make.left.equalToSuperview().offset(15)
         }
 
         descriptionLabel.snp.makeConstraints { make in
-            make.top.equalTo(titleLabel.snp.bottom).offset(6)
-            make.left.equalToSuperview().offset(8)
+            make.centerY.equalTo(cellBackgroundView.snp.centerY).offset(10)
+            make.left.equalToSuperview().offset(15)
             make.bottom.lessThanOrEqualToSuperview().offset(-8)
         }
 

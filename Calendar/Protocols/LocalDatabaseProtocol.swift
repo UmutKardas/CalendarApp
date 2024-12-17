@@ -4,13 +4,17 @@
 //
 //  Created by Hüseyin Umut Kardaş on 1.12.2024.
 //
+
 import CoreData
 import Foundation
+import RxCocoa
+import RxSwift
 
 protocol LocalDatabaseProtocol {
     func saveContext() throws
-    func fetchObjects<T: NSManagedObject>(entityName: String, predicate: NSPredicate?, sortDescriptors: [NSSortDescriptor]?) -> [T]?
-    func createNewEntity<T: NSManagedObject>(entityName: String) -> T?
-    func deleteObject<T: NSManagedObject>(_ object: T)
+    func saveEventItem(object: EventItem)
+    func fetchObjects(entityName: String, predicate: NSPredicate?, sortDescriptors: [NSSortDescriptor]?) -> Observable<[EventItem]?>
+    func createNewEntity(entityName: String) -> EventItem?
+    func deleteObject(_ object: EventItem)
     func deleteAll(entityName: String)
 }

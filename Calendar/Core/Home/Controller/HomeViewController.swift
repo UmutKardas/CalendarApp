@@ -5,6 +5,8 @@
 //  Created by Hüseyin Umut Kardaş on 1.12.2024.
 //
 
+import RxCocoa
+import RxSwift
 import SnapKit
 import UIKit
 
@@ -19,9 +21,22 @@ class HomeViewController: UIViewController {
         return tableView
     }()
 
-    private lazy var headerView = HomeTableViewHeader()
+    private let addEventButton: UIButton = {
+        let button = UIButton()
+        button.setImage(UIImage(systemName: "plus"), for: .normal)
+        button.tintColor = .label
+        button.backgroundColor = UIColor(named: "blueColor")
+        button.layer.masksToBounds = true
+        button.layer.cornerRadius = 30
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
+    }()
 
-    private let viewModel: HomeViewModel = .init()
+    private lazy var headerView = HomeTableViewHeader()
+    private lazy var eventData: [EventItem] = []
+
+    private let viewModel: HomeViewModel = .init(localDatabase: AppContainer.shared.database)
+    private let disposeBag = DisposeBag()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -39,6 +54,7 @@ private extension HomeViewController {
     private func setupLayout() {
         view.addSubview(tableView)
         view.addSubview(headerView)
+        view.addSubview(addEventButton)
     }
 
     private func setupConstraints() {
@@ -53,9 +69,23 @@ private extension HomeViewController {
             make.bottom.equalToSuperview()
             make.left.right.equalTo(view.safeAreaLayoutGuide)
         }
+
+        addEventButton.snp.makeConstraints { make in
+            make.width.height.equalTo(60)
+            make.bottom.equalTo(view.safeAreaLayoutGuide).offset(-16)
+            make.right.equalTo(view.safeAreaLayoutGuide).offset(-16)
+        }
     }
 
-    private func bindView() {}
+    private func bindView() {
+        viewModel.eventData
+            .observe(on: MainScheduler.instance)
+            .subscribe { [weak self] data in
+                self?.eventData = data ?? []
+                self?.tableView.reloadData()
+            }
+            .disposed(by: disposeBag)
+    }
 }
 
 extension HomeViewController: UITableViewDelegate, UITableViewDataSource {

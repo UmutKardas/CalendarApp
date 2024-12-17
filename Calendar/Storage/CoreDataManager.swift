@@ -7,6 +7,8 @@
 
 import CoreData
 import Foundation
+import RxCocoa
+import RxSwift
 import UIKit
 
 final class CoreDataManager: LocalDatabaseProtocol {
@@ -33,30 +35,47 @@ final class CoreDataManager: LocalDatabaseProtocol {
         }
     }
 
-    func createNewEntity<T>(entityName: String) -> T? where T: NSManagedObject {
+    func createNewEntity(entityName: String) -> EventItem? {
         guard let entityDescription = NSEntityDescription.entity(forEntityName: entityName, in: context) else {
             print("Failed to find entity: \(entityName)")
             return nil
         }
-        let object = T(entity: entityDescription, insertInto: context)
-        return object
+        let object = NSManagedObject(entity: entityDescription, insertInto: context)
+        saveContext()
+        return EventItem(from: object)
     }
 
-    func fetchObjects<T>(entityName: String, predicate: NSPredicate?, sortDescriptors: [NSSortDescriptor]?) -> [T]? where T: NSManagedObject {
-        let request = NSFetchRequest<T>(entityName: entityName)
+    func saveEventItem(object: EventItem) {
+        let managedObject = context.object(with: object.id)
+        managedObject.setValue(object.title, forKey: "title")
+        managedObject.setValue(object.startDate, forKey: "startDate")
+        managedObject.setValue(object.endDate, forKey: "endDate")
+        managedObject.setValue(object.isCompleted, forKey: "isCompleted")
+        saveContext()
+    }
+
+    func fetchObjects(entityName: String, predicate: NSPredicate?, sortDescriptors: [NSSortDescriptor]?) -> Observable<[EventItem]?> {
+        let request = NSFetchRequest<NSFetchRequestResult>(entityName: entityName)
         request.predicate = predicate
         request.sortDescriptors = sortDescriptors
 
-        do {
-            return try context.fetch(request)
-        } catch {
-            print("Failed to fetch data: \(error)")
-            return nil
+        return Observable.create { observer in
+            do {
+                let data = try self.context.fetch(request)
+                observer.onNext(data.compactMap { EventItem(from: $0 as! NSManagedObject)
+                })
+            } catch {
+                print("Failed to fetch data: \(error)")
+                observer.onError(error)
+            }
+
+            return Disposables.create()
         }
     }
 
-    func deleteObject<T: NSManagedObject>(_ object: T) {
-        context.delete(object)
+    func deleteObject(_ object: EventItem) {
+        let managedObject = context.object(with: object.id)
+        context.delete(managedObject)
         saveContext()
     }
 

@@ -14,7 +14,7 @@ class HomeTableViewCell: UITableViewCell {
     private let dayNameLabel: UILabel = {
         let label = UILabel()
         label.text = "Sat"
-        label.font = .systemFont(ofSize: 16, weight: .light)
+        label.font = .systemFont(ofSize: 16, weight: .regular)
         label.textColor = UIColor(named: "grayColor")
         return label
     }()
@@ -22,7 +22,7 @@ class HomeTableViewCell: UITableViewCell {
     private let dayNumberLabel: UILabel = {
         let label = UILabel()
         label.text = "10"
-        label.font = .systemFont(ofSize: 20, weight: .regular)
+        label.font = .systemFont(ofSize: 24, weight: .medium)
         label.textColor = .black
         return label
     }()
@@ -38,6 +38,7 @@ class HomeTableViewCell: UITableViewCell {
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
+        backgroundColor = UIColor(named: "tableViewColor")
         setupLayout()
         setupConstraints()
     }
@@ -60,13 +61,13 @@ class HomeTableViewCell: UITableViewCell {
 
     private func setupConstraints() {
         dayNameLabel.snp.makeConstraints { make in
-            make.top.equalToSuperview().offset(8)
-            make.left.equalToSuperview().offset(8)
+            make.top.equalToSuperview().offset(15)
+            make.left.equalToSuperview().offset(12)
         }
 
         dayNumberLabel.snp.makeConstraints { make in
             make.top.equalTo(dayNameLabel.snp.bottom).offset(6)
-            make.left.equalToSuperview().offset(8)
+            make.left.equalToSuperview().offset(10)
         }
 
         eventStackView.snp.makeConstraints { make in
