@@ -19,7 +19,7 @@ class EventItemView: UIView {
     private let descriptionLabel: UILabel = {
         let label = UILabel()
         label.text = "1:00 PM - 2:00 PM"
-        label.font = .systemFont(ofSize: 10, weight: .regular)
+        label.font = .systemFont(ofSize: 12, weight: .regular)
         return label
     }()
 
@@ -48,9 +48,9 @@ class EventItemView: UIView {
 
 extension EventItemView {
     func setup(eventItem: EventItem, viewModel: HomeViewModel) {
-        let inProgress = Calendar.current.isDateInToday(eventItem.startDate)
+        let inProgress = viewModel.isEventInProgress(eventItem: eventItem)
         titleLabel.text = eventItem.title
-        descriptionLabel.text = formatEventTimeRange(startDate: eventItem.startDate, endDate: eventItem.endDate)
+        descriptionLabel.text = formatEventTimeRange(eventItem: eventItem)
         cellBackgroundView.backgroundColor = inProgress ? UIColor.blueColor : UIColor.white
         titleLabel.textColor = inProgress ? UIColor.white : UIColor.black
         descriptionLabel.textColor = inProgress ? UIColor.white : UIColor.grayColor
@@ -87,12 +87,11 @@ extension EventItemView {
         }
     }
 
-    private func formatEventTimeRange(startDate: Date, endDate: Date) -> String {
+    private func formatEventTimeRange(eventItem: EventItem) -> String {
         let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "h:mm a"
-
-        let startDateString = dateFormatter.string(from: startDate)
-        let endDateString = dateFormatter.string(from: endDate)
+        dateFormatter.dateFormat = "MMM dd, h:mm a"
+        let startDateString = dateFormatter.string(from: eventItem.startDate)
+        let endDateString = dateFormatter.string(from: eventItem.endDate)
 
         return "\(startDateString)-\(endDateString)"
     }

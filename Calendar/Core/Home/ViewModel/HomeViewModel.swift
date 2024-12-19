@@ -10,11 +10,12 @@ import RxCocoa
 import RxSwift
 
 final class HomeViewModel {
-    let eventData: BehaviorSubject<[EventItem]?> = .init(value: nil)
-    var currentDay: Int = Calendar.current.component(.day, from: Date())
+    let eventData = BehaviorSubject<[EventItem]?>(value: nil)
 
-    private var database: LocalDatabaseProtocol
+    private let database: LocalDatabaseProtocol
     private let disposeBag = DisposeBag()
+
+    var currentDay: Int = Calendar.current.component(.day, from: Date())
 
     init(localDatabase: LocalDatabaseProtocol) {
         self.database = localDatabase
@@ -23,16 +24,32 @@ final class HomeViewModel {
 
     private func fetchData() {
         database.fetchObjects(entityName: EventItem.coreDataEntityName, predicate: nil, sortDescriptors: nil)
-            .subscribe { [weak self] events in
-                self?.eventData.onNext(events)
-            } onError: { error in
-                print("Error fetching data: \(error.localizedDescription)")
-            }
+            .subscribe(
+                onNext: { [weak self] events in
+                    let sortedEvents = events?.sorted(by: { $0.startDate < $1.startDate })
+                    self?.eventData.onNext(sortedEvents)
+                },
+                onError: { error in
+                    print("Error fetching data: \(error.localizedDescription)")
+                }
+            )
             .disposed(by: disposeBag)
     }
 
-    func getDayDetails(for index: Int) -> (originalIndex: Int, day: Day) {
+    func dayDetails(for index: Int) -> (originalIndex: Int, day: Day) {
         let dayIndex = index % Day.allCases.count
         return (originalIndex: index + 1, day: Day.allCases[dayIndex])
+    }
+
+    func dayDetails(for eventItem: EventItem) -> (originalIndex: Int, day: Day) {
+        guard let dayIndex = Calendar.current.dateComponents([.day], from: eventItem.startDate).day else {
+            fatalError("Unable to extract day component from eventItem.startDate")
+        }
+        return dayDetails(for: dayIndex - 1)
+    }
+
+    func isEventInProgress(eventItem: EventItem) -> Bool {
+        let currentDate = Date()
+        return currentDate >= eventItem.startDate && currentDate <= eventItem.endDate
     }
 }

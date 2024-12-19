@@ -65,7 +65,7 @@ extension HomeTableViewHeader: UICollectionViewDelegate, UICollectionViewDataSou
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: HomeHeaderViewCell.identifier, for: indexPath) as? HomeHeaderViewCell else {
             return UICollectionViewCell()
         }
-        let details = viewModel?.getDayDetails(for: indexPath.row) ?? (0, .Monday)
+        let details = viewModel?.dayDetails(for: indexPath.row) ?? (0, .Monday)
         cell.configure(dayNumber: details.originalIndex, day: details.day, currentDay: viewModel?.currentDay ?? 0)
         return cell
     }

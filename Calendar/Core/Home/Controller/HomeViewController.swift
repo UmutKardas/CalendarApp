@@ -33,7 +33,6 @@ class HomeViewController: UIViewController {
     }()
 
     private lazy var headerView = HomeTableViewHeader()
-    private var eventData: [EventItem] = []
 
     private let viewModel: HomeViewModel = .init(localDatabase: AppContainer.shared.database)
     private let disposeBag = DisposeBag()
@@ -82,21 +81,7 @@ private extension HomeViewController {
         }
     }
 
-    private func bindView() {
-        viewModel.eventData
-            .observe(on: MainScheduler.instance)
-            .subscribe { [weak self] data in
-                self?.eventData = data ?? []
-                self?.tableView.reloadData()
-            }
-            .disposed(by: disposeBag)
-
-        addEventButton.rx.tap
-            .subscribe(onNext: { [weak self] in
-                self?.navigationController?.pushViewController(AddEventViewController(), animated: true)
-            })
-            .disposed(by: disposeBag)
-    }
+    private func bindView() {}
 }
 
 extension HomeViewController: UITableViewDelegate, UITableViewDataSource {
@@ -112,7 +97,7 @@ extension HomeViewController: UITableViewDelegate, UITableViewDataSource {
     }
 
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 100 * 3 + 3 * 4 // yukseklik x count + count + 1 x 3
+        return 100
     }
 }
 
