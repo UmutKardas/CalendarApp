@@ -9,25 +9,26 @@ import CoreData
 import Foundation
 
 struct EventItem {
-    var day: Int
+    var eventId: String = UUID().uuidString
     var title: String
-    var about: String
     var isCompleted: Bool
+    var startDate: Date
+    var endDate: Date
     var id: NSManagedObjectID?
 
     init(from managedObject: NSManagedObject) {
-        self.day = managedObject.value(forKey: "day") as? Int ?? 1
         self.title = managedObject.value(forKey: "title") as? String ?? ""
-        self.about = managedObject.value(forKey: "about") as? String ?? ""
         self.isCompleted = managedObject.value(forKey: "isCompleted") as? Bool ?? false
+        self.startDate = managedObject.value(forKey: "startDate") as? Date ?? Date()
+        self.endDate = managedObject.value(forKey: "endDate") as? Date ?? Date()
         self.id = managedObject.objectID
     }
 
-    init(day: Int, title: String, about: String, isCompleted: Bool) {
-        self.day = day
+    init(title: String, isCompleted: Bool, startDate: Date, endDate: Date) {
         self.title = title
-        self.about = about
         self.isCompleted = isCompleted
+        self.startDate = startDate
+        self.endDate = endDate
         self.id = nil
     }
 }

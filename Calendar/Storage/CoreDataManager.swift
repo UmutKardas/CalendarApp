@@ -53,8 +53,8 @@ final class CoreDataManager: LocalDatabaseProtocol {
 
         let managedObject = context.object(with: id)
         managedObject.setValue(object.title, forKey: "title")
-        managedObject.setValue(object.day, forKey: "day")
-        managedObject.setValue(object.about, forKey: "about")
+        managedObject.setValue(object.startDate, forKey: "startDate")
+        managedObject.setValue(object.endDate, forKey: "endDate")
         managedObject.setValue(object.isCompleted, forKey: "isCompleted")
         saveContext()
     }
