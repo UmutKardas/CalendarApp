@@ -5,6 +5,8 @@
 //  Created by Hüseyin Umut Kardaş on 18.12.2024.
 //
 
+import RxCocoa
+import RxSwift
 import UIKit
 
 class AddEventViewController: UIViewController {
@@ -24,16 +26,16 @@ class AddEventViewController: UIViewController {
         return textField
     }()
 
-    private lazy var startDateTextField: EventInputView = {
-        let textField = EventInputView()
-        textField.placeHolder = "EnterStart Date"
+    private lazy var startDateTextField: DateInputView = {
+        let textField = DateInputView()
+        textField.placeHolder = "Enter Start Date"
         textField.iconNamed = "calendar.badge.clock"
         textField.translatesAutoresizingMaskIntoConstraints = false
         return textField
     }()
 
-    private lazy var endDateTextField: EventInputView = {
-        let textField = EventInputView()
+    private lazy var endDateTextField: DateInputView = {
+        let textField = DateInputView()
         textField.placeHolder = "Enter End Date"
         textField.iconNamed = "calendar.badge.checkmark"
         textField.translatesAutoresizingMaskIntoConstraints = false
@@ -49,6 +51,8 @@ class AddEventViewController: UIViewController {
         return button
     }()
 
+    private let viewModel: AddEventViewModel = .init(database: AppContainer.shared.database)
+    private let disposeBag = DisposeBag()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -107,7 +111,37 @@ extension AddEventViewController {
         }
     }
 
-    private func bindView() {}
+    private func bindView() {
+        titleTextField.textField.rx.text
+            .orEmpty
+            .bind(to: viewModel.title)
+            .disposed(by: disposeBag)
+
+        startDateTextField.eventDatePicker.rx.date
+            .subscribe { [weak self] date in
+                self?.viewModel.startDate.accept(date.timeIntervalSince1970)
+            }
+            .disposed(by: disposeBag)
+
+        endDateTextField.eventDatePicker.rx.date
+            .subscribe { [weak self] date in
+                self?.viewModel.endDate.accept(date.timeIntervalSince1970)
+            }
+            .disposed(by: disposeBag)
+
+        addButton.rx.tap
+            .bind { [weak self] in
+                if self?.viewModel.addEvent() == true {
+                    self?.navigationController?.pushViewController(HomeViewController(), animated: true)
+                }
+            }
+            .disposed(by: disposeBag)
+
+        viewModel.error.subscribe { [weak self] error in
+            let alert = UIAlertController.showAlert(title: "Error", message: error)
+            self?.present(alert, animated: true)
+        }.disposed(by: disposeBag)
+    }
 }
 
 #Preview {

@@ -13,21 +13,18 @@ class EventItemView: UIView {
         let label = UILabel()
         label.text = "Learning English"
         label.font = .systemFont(ofSize: 16, weight: .semibold)
-        label.textColor = .white
         return label
     }()
 
     private let descriptionLabel: UILabel = {
         let label = UILabel()
         label.text = "1:00 PM - 2:00 PM"
-        label.font = .systemFont(ofSize: 14, weight: .regular)
-        label.textColor = .white
+        label.font = .systemFont(ofSize: 10, weight: .regular)
         return label
     }()
 
     private let cellBackgroundView: UIView = {
         let view = UIView()
-        view.backgroundColor = UIColor.blueColor
         view.layer.cornerRadius = 8
         view.layer.shadowColor = UIColor.black.cgColor
         view.layer.shadowOffset = CGSize(width: 0, height: 1)
@@ -46,6 +43,17 @@ class EventItemView: UIView {
     @available(*, unavailable)
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+}
+
+extension EventItemView {
+    func setup(eventItem: EventItem, viewModel: HomeViewModel) {
+        let inProgress = Calendar.current.isDateInToday(eventItem.startDate)
+        titleLabel.text = eventItem.title
+        descriptionLabel.text = formatEventTimeRange(startDate: eventItem.startDate, endDate: eventItem.endDate)
+        cellBackgroundView.backgroundColor = inProgress ? UIColor.blueColor : UIColor.white
+        titleLabel.textColor = inProgress ? UIColor.white : UIColor.black
+        descriptionLabel.textColor = inProgress ? UIColor.white : UIColor.grayColor
     }
 
     private func setupLayout() {
@@ -77,5 +85,15 @@ class EventItemView: UIView {
         snp.makeConstraints { make in
             make.height.equalTo(100)
         }
+    }
+
+    private func formatEventTimeRange(startDate: Date, endDate: Date) -> String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "h:mm a"
+
+        let startDateString = dateFormatter.string(from: startDate)
+        let endDateString = dateFormatter.string(from: endDate)
+
+        return "\(startDateString)-\(endDateString)"
     }
 }
