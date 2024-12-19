@@ -27,7 +27,7 @@ class EventItemView: UIView {
 
     private let cellBackgroundView: UIView = {
         let view = UIView()
-        view.backgroundColor = UIColor(named: "blueColor")
+        view.backgroundColor = UIColor.blueColor
         view.layer.cornerRadius = 8
         view.layer.shadowColor = UIColor.black.cgColor
         view.layer.shadowOffset = CGSize(width: 0, height: 1)
