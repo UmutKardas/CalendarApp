@@ -46,10 +46,15 @@ final class CoreDataManager: LocalDatabaseProtocol {
     }
 
     func saveEventItem(object: EventItem) {
-        let managedObject = context.object(with: object.id)
+        guard let id = object.id else {
+            print("Failed to save object: \(object)")
+            return
+        }
+
+        let managedObject = context.object(with: id)
         managedObject.setValue(object.title, forKey: "title")
-        managedObject.setValue(object.startDate, forKey: "startDate")
-        managedObject.setValue(object.endDate, forKey: "endDate")
+        managedObject.setValue(object.day, forKey: "day")
+        managedObject.setValue(object.about, forKey: "about")
         managedObject.setValue(object.isCompleted, forKey: "isCompleted")
         saveContext()
     }
@@ -74,7 +79,12 @@ final class CoreDataManager: LocalDatabaseProtocol {
     }
 
     func deleteObject(_ object: EventItem) {
-        let managedObject = context.object(with: object.id)
+        guard let id = object.id else {
+            print("Failed to delete object: \(object)")
+            return
+        }
+
+        let managedObject = context.object(with: id)
         context.delete(managedObject)
         saveContext()
     }

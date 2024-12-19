@@ -15,7 +15,7 @@ class HomeViewController: UIViewController {
         let tableView = UITableView()
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
         tableView.translatesAutoresizingMaskIntoConstraints = false
-        tableView.backgroundColor = UIColor(named: "tableViewColor")
+        tableView.backgroundColor = UIColor.tableViewColor
         tableView.separatorStyle = .none
         tableView.register(HomeTableViewCell.self, forCellReuseIdentifier: HomeTableViewCell.identifier)
         return tableView
@@ -25,7 +25,7 @@ class HomeViewController: UIViewController {
         let button = UIButton()
         button.setImage(UIImage(systemName: "plus"), for: .normal)
         button.tintColor = .label
-        button.backgroundColor = UIColor(named: "blueColor")
+        button.backgroundColor = UIColor.blueColor
         button.layer.masksToBounds = true
         button.layer.cornerRadius = 30
         button.translatesAutoresizingMaskIntoConstraints = false
@@ -40,10 +40,7 @@ class HomeViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .white
-        tableView.delegate = self
-        tableView.dataSource = self
-        headerView.setup(viewModel: viewModel)
+        setupView()
         setupLayout()
         setupConstraints()
         bindView()
@@ -51,6 +48,14 @@ class HomeViewController: UIViewController {
 }
 
 private extension HomeViewController {
+    private func setupView() {
+        navigationController?.navigationBar.isHidden = true
+        view.backgroundColor = .white
+        tableView.delegate = self
+        tableView.dataSource = self
+        headerView.setup(viewModel: viewModel)
+    }
+
     private func setupLayout() {
         view.addSubview(tableView)
         view.addSubview(headerView)
@@ -84,6 +89,12 @@ private extension HomeViewController {
                 self?.eventData = data ?? []
                 self?.tableView.reloadData()
             }
+            .disposed(by: disposeBag)
+
+        addEventButton.rx.tap
+            .subscribe(onNext: { [weak self] in
+                self?.navigationController?.pushViewController(AddEventViewController(), animated: true)
+            })
             .disposed(by: disposeBag)
     }
 }

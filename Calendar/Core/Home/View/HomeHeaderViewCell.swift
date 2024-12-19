@@ -14,7 +14,7 @@ class HomeHeaderViewCell: UICollectionViewCell {
     private let dayLabel: UILabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 16, weight: .semibold)
-        label.textColor = UIColor(named: "grayColor")
+        label.textColor = UIColor.grayColor
         label.textAlignment = .center
         return label
     }()

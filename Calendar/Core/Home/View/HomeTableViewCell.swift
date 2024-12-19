@@ -15,7 +15,7 @@ class HomeTableViewCell: UITableViewCell {
         let label = UILabel()
         label.text = "Sat"
         label.font = .systemFont(ofSize: 16, weight: .regular)
-        label.textColor = UIColor(named: "grayColor")
+        label.textColor = UIColor.grayColor
         return label
     }()
 
@@ -38,7 +38,7 @@ class HomeTableViewCell: UITableViewCell {
 
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        backgroundColor = UIColor(named: "tableViewColor")
+        backgroundColor = UIColor.tableViewColor
         setupLayout()
         setupConstraints()
     }
