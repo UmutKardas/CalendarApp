@@ -33,6 +33,7 @@ class HomeViewController: UIViewController {
     }()
 
     private lazy var headerView = HomeTableViewHeader()
+    private var groupedEvents: [[EventItem]]? = []
 
     private let viewModel: HomeViewModel = .init(localDatabase: AppContainer.shared.database)
     private let disposeBag = DisposeBag()
@@ -81,23 +82,40 @@ private extension HomeViewController {
         }
     }
 
-    private func bindView() {}
+    private func bindView() {
+        viewModel.groupedEvents
+            .observe(on: MainScheduler.instance)
+            .subscribe { [weak self] events in
+                self?.groupedEvents = events
+                self?.tableView.reloadData()
+            }
+            .disposed(by: disposeBag)
+
+        addEventButton.rx.tap.bind { [weak self] in
+            let addEventViewController = AddEventViewController()
+            self?.navigationController?.pushViewController(addEventViewController, animated: true)
+        }.disposed(by: disposeBag)
+    }
 }
 
 extension HomeViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 3
+        return groupedEvents?.count ?? 0
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: HomeTableViewCell.identifier, for: indexPath) as? HomeTableViewCell else {
             return UITableViewCell()
         }
+
+        let eventItems = groupedEvents?[indexPath.row]
+        cell.setup(events: eventItems ?? [], viewModel: viewModel)
+
         return cell
     }
 
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 100
+        return 100 * CGFloat(groupedEvents?[indexPath.row].count ?? 0)
     }
 }
 

@@ -10,7 +10,7 @@ import RxCocoa
 import RxSwift
 
 final class HomeViewModel {
-    let eventData = BehaviorSubject<[EventItem]?>(value: nil)
+    let groupedEvents = BehaviorSubject<[[EventItem]]?>(value: nil)
 
     private let database: LocalDatabaseProtocol
     private let disposeBag = DisposeBag()
@@ -27,13 +27,33 @@ final class HomeViewModel {
             .subscribe(
                 onNext: { [weak self] events in
                     let sortedEvents = events?.sorted(by: { $0.startDate < $1.startDate })
-                    self?.eventData.onNext(sortedEvents)
+
+                    var groupedEvents: [[EventItem]] = []
+
+                    sortedEvents?.forEach { event in
+                        let dayOfMonth = self?.getDayOfMonth(from: event.startDate) ?? 0
+
+                        if let index = groupedEvents.firstIndex(where: { self?.getDayOfMonth(from: $0.first?.startDate ?? Date()) == dayOfMonth }) {
+                            groupedEvents[index].append(event)
+                        }
+                        else {
+                            groupedEvents.append([event])
+                        }
+                    }
+
+                    self?.groupedEvents.onNext(groupedEvents)
+
                 },
                 onError: { error in
                     print("Error fetching data: \(error.localizedDescription)")
                 }
             )
             .disposed(by: disposeBag)
+    }
+
+    func getDayOfMonth(from date: Date) -> Int {
+        let calendar = Calendar.current
+        return calendar.component(.day, from: date)
     }
 
     func dayDetails(for index: Int) -> (originalIndex: Int, day: Day) {

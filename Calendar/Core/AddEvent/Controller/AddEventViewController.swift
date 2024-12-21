@@ -10,12 +10,20 @@ import RxSwift
 import UIKit
 
 class AddEventViewController: UIViewController {
-    private var titleLabel: UILabel = {
+    private let titleLabel: UILabel = {
         let label = UILabel()
         label.text = "Add Event"
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = .systemFont(ofSize: 32, weight: .semibold)
         return label
+    }()
+
+    private let backButton: UIButton = {
+        let button = UIButton()
+        button.setImage(UIImage(systemName: "chevron.left"), for: .normal)
+        button.tintColor = .label
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
     }()
 
     private lazy var titleTextField: EventInputView = {
@@ -42,7 +50,7 @@ class AddEventViewController: UIViewController {
         return textField
     }()
 
-    private var addButton: UIButton = {
+    private let addButton: UIButton = {
         let button = UIButton()
         button.setTitle("Add to Calendar", for: .normal)
         button.backgroundColor = UIColor.systemBlue
@@ -69,6 +77,7 @@ extension AddEventViewController {
     }
 
     private func setupLayout() {
+        view.addSubview(backButton)
         view.addSubview(titleLabel)
         view.addSubview(titleTextField)
         view.addSubview(startDateTextField)
@@ -77,6 +86,12 @@ extension AddEventViewController {
     }
 
     private func setupConstraints() {
+        backButton.snp.makeConstraints { make in
+            make.top.equalTo(view.safeAreaLayoutGuide).offset(8)
+            make.leading.equalTo(view.safeAreaLayoutGuide).offset(8)
+            make.width.height.equalTo(40)
+        }
+
         titleLabel.snp.makeConstraints { make in
             make.centerY.equalTo(view.safeAreaLayoutGuide).offset(-200)
             make.centerX.equalTo(view.safeAreaLayoutGuide)
@@ -134,6 +149,12 @@ extension AddEventViewController {
                 if self?.viewModel.addEvent() == true {
                     self?.navigationController?.pushViewController(HomeViewController(), animated: true)
                 }
+            }
+            .disposed(by: disposeBag)
+
+        backButton.rx.tap
+            .bind { [weak self] in
+                self?.navigationController?.pushViewController(HomeViewController(), animated: true)
             }
             .disposed(by: disposeBag)
 

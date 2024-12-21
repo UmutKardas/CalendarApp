@@ -31,7 +31,7 @@ class HomeTableViewCell: UITableViewCell {
         stackView.axis = .vertical
         stackView.spacing = 1
         stackView.alignment = .fill
-        stackView.distribution = .fill
+        stackView.distribution = .fillEqually
         return stackView
     }()
 
@@ -59,7 +59,8 @@ extension HomeTableViewCell {
         dayNameLabel.snp.makeConstraints { make in
             make.top.equalToSuperview().offset(15)
             make.left.equalToSuperview().offset(12)
-            make.width.height.equalTo(24)
+            make.width.equalTo(32)
+            make.height.equalTo(24)
         }
 
         dayNumberLabel.snp.makeConstraints { make in
